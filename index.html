@@ -69,10 +69,14 @@
   .error{ color:var(--danger); font-weight:600; }
   .help{ font-size:12px; color:#6c757d; }
   .req::after{ content:" *"; color:var(--danger); font-weight:700; }
+
   .btn{ background:var(--accent); color:#fff; border:none; border-radius:12px; padding:10px 14px; cursor:pointer; transition:background .2s,opacity .2s; }
   .btn.selected{ background:#1f7cc7; }
   .btn.wait{ background:var(--accent-wait); opacity:.85; }
+  .btn.full,
+  .btn.selected.full{ background:#dcdfe3; color:#6b7280; cursor:default; } /* light grey when no spaces left */
   .btn-primary{ background:var(--primary); font-weight:700; padding:14px 18px; font-size:18px; border-radius:14px; }
+
   .loading{ padding:16px; font-weight:800; color:var(--danger); }
   .mega{ font-size:1.8rem; } .mega .santa{ font-size:2.4rem; }
   .invalid{ border-color:var(--danger)!important; background:#fff5f5!important; }
@@ -157,7 +161,7 @@
     <div class="panel">
       <div class="card">
         <strong>My details</strong>
-        <div class="help" style="margin-top:6px; margin-bottom:6px; color:#e03131; font-weight:700">
+        <div class="help" style="margin-top:6px; margin-bottom:6px; color:#e03131; font-weight:700; font-size:14px">
           Student volunteers: name and class but <em>parent/guardian email and mobile only</em>.
         </div>
         <div class="grid2" style="margin-top:4px">
@@ -316,7 +320,6 @@
     stallDesc.textContent = 'Choose a group to see stall details here.';
   }
 
-  // Map a sub-stall label to its parent Year-Stall (for chip/desc sync)
   function yearFromSubstall(sub){
     if (!sub) return '';
     const map = {
@@ -338,7 +341,6 @@
 
   // ===== STALL DROPDOWN =====
   function buildStallOptions(yearLabel){
-    // Ordered year sub-stalls
     const yearSubs = [
       'Y7 Grotto','Y7 Photobooth',
       'Y8 Pies and hot drinks','Y8 Crisps, Sweets & Cans','Y8 Chocolate Tombola',
@@ -351,7 +353,6 @@
     const options = [];
     options.push({ value:'', label:'All stalls' });
 
-    // Constrain to the selected year (if any)
     yearSubs.forEach(sub=>{
       if (yearLabel){
         const y = yearFromSubstall(sub);
@@ -360,7 +361,6 @@
       options.push({ value:'sub::'+sub, label:sub });
     });
 
-    // Extra stalls
     options.push({ value:'extra::Artisan Foods', label:'Any Year: Artisan Foods' });
     options.push({ value:'extra::Put me where you need me!', label:'Put me where you need me!' });
     options.push({ value:'extra::Governors/LMS Leadership', label:'Governors: Front Gate' });
@@ -368,47 +368,35 @@
     substallSelect.innerHTML = options.map(o=>`<option value="${o.value}">${o.label}</option>`).join('');
   }
 
-  // ===== SUB-STALL MATCHERS (FIXED) =====
-
-  // Decide which sub-stall "buckets" a row belongs to
+  // ===== SUB-STALL MATCHERS =====
   function subPartsFor(group){
     const raw  = group.sub_stall || '';
     const n    = normSub(raw);
     const role = norm(group.role || '');
 
-    // Handle the two combined helper sub-stalls specially
     if (n === 'y9 bakery & spin the wheel') {
-      if (role.includes('spin the wheel')) return ['y9 spin the wheel']; // only Spin
-      if (role.includes('bakery'))         return ['y9 bakery'];         // only Bakery
-      return ['y9 bakery','y9 spin the wheel'];                          // generic helpers to both
+      if (role.includes('spin the wheel')) return ['y9 spin the wheel'];
+      if (role.includes('bakery'))         return ['y9 bakery'];
+      return ['y9 bakery','y9 spin the wheel'];
     }
     if (n === 'y10 pre-loved & books') {
       if (role.includes('books'))     return ['y10 books'];
       if (role.includes('pre-loved')) return ['y10 pre-loved'];
       return ['y10 books','y10 pre-loved'];
     }
-
-    // Everything else (e.g., "Y8 Crisps, Sweets & Cans") = single exact label
     return [n];
   }
-
-  // Compare a group against the selected stall option
   function matchesStallOption(group, subOpt){
     if (!subOpt) return true;
-
-    // "extra::<Year-Stall>" rows filter by Year-Stall (column B) only
     if (subOpt.startsWith('extra::')){
       const stallName = subOpt.slice(7);
       return group.stall === stallName;
     }
-
-    // "sub::<label>" rows filter by Sub stall (column P) buckets
     if (subOpt.startsWith('sub::')){
       const wanted = normSub(subOpt.slice(5));
-      const parts  = subPartsFor(group);   // array of normalized bucket labels
+      const parts  = subPartsFor(group);
       return parts.some(p => p === wanted);
     }
-
     return true;
   }
 
@@ -429,25 +417,13 @@
   }
   function linksForSelection(pickedLabels){
     const uniqueStalls = [...new Set(pickedLabels.map(l => l.split(',')[0].trim()))];
-
-    // Year links
-    const years = uniqueStalls
-      .filter(s => !isExtraStall(s))
-      .map(extractYearKey)
-      .filter(Boolean);
-
+    const years = uniqueStalls.filter(s => !isExtraStall(s)).map(extractYearKey).filter(Boolean);
     const hasLead  = pickedLabels.some(l => /\blead\b/i.test(l));
     const hasCoord = pickedLabels.some(l => /\bco[- ]?ordinator|coordinator/i.test(l));
 
     const links = [];
     years.forEach(y => { if (YEAR_LINKS[y]) links.push(YEAR_LINKS[y]); });
-
-    // Extra stall links
-    uniqueStalls.forEach(s => {
-      const u = extraLinkFor(s);
-      if (u) links.push(u);
-    });
-
+    uniqueStalls.forEach(s => { const u = extraLinkFor(s); if (u) links.push(u); });
     if ((hasLead || hasCoord) && YEAR_LINKS['Leads']) links.push(YEAR_LINKS['Leads']);
 
     return [...new Set(links)];
@@ -466,7 +442,6 @@
     stallIndex = new Map((meta.stalls||[]).map((s,i)=>[s,i]));
     descMap = new Map(Object.entries(meta.descriptionsByStall || {}));
 
-    // Year chips
     stallChips.innerHTML = (meta.stalls||[]).map(s=>`<span class="chip" data-stall="${s}">${s}</span>`).join('');
 
     if(!listenersBound){
@@ -492,11 +467,9 @@
       substallSelect.addEventListener('change', ()=>{
         current.subOpt = substallSelect.value;
         if (current.subOpt.startsWith('sub::')){
-          // Sync the year chip to this sub-stall
           const y = yearFromSubstall(current.subOpt.slice(5));
           if (y){ current.stall = y; collapseTo(y); }
         } else if (current.subOpt.startsWith('extra::')){
-          // Extra: no chip; show description for that stall
           const stallName = current.subOpt.slice(7);
           expandAllChips(); current.stall='';
           stallDesc.textContent = descMap.get(stallName) || 'No description yet.';
@@ -506,23 +479,18 @@
       listenersBound=true;
     }
 
-    // Times
     const times=(meta.times||[]).slice().sort((a,b)=>a.localeCompare(b));
     timeSelect.innerHTML = `<option value="">All times</option>` + times.map(t=>`<option value="${t}" ${t===prevTime?'selected':''}>${t}</option>`).join('');
     current.time = prevTime || '';
 
-    // Classes
     childClass.innerHTML = `<option value="">— Select class —</option>` + CLASS_LIST.map(c=>`<option value="${c}">${c}</option>`).join('');
 
-    // Stall dropdown
     buildStallOptions(prevStall || '');
     if (prevSubOpt) substallSelect.value = prevSubOpt;
 
-    // Restore stall chip selection
     if(prevStall){ current.stall = prevStall; collapseTo(prevStall); }
     else{ expandAllChips(); }
 
-    // Deep links
     applyQueryParams();
 
     filtersCard.style.display='block';
@@ -558,15 +526,11 @@
 
     let list=(data.data||[]).slice();
 
-    // Stall filter (year sub-stall or extra stall)
     list = list.filter(g => matchesStallOption(g, current.subOpt));
 
-    // Hide full if requested
     if (hideFilled.checked) list = list.filter(g => (g.remaining||0) > 0);
 
-    // Sort
     list = list.sort((a,b)=>{
-      // Leads first, then baking, then time order
       const leadA = /lead/i.test(a.role||'') ? 0 : 1;
       const leadB = /lead/i.test(b.role||'') ? 0 : 1;
       if (leadA !== leadB) return leadA - leadB;
@@ -607,6 +571,8 @@
         lastTime = g.time;
       }
       const sel = selection.has(g.group_id);
+      const remainingDisplay = sel ? Math.max(0,(g.remaining||0)-1) : (g.remaining||0);
+      const isFullAfter = remainingDisplay <= 0;
       const btnText = sel?'Selected':'Select';
       const canSelect = (g.remaining||0)>0 || sel;
       const bookedTxt = `<span class="muted" style="margin-right:8px">${g.booked||0} booked</span>`;
@@ -625,8 +591,8 @@
         </div>
         <div style="display:flex; align-items:center; gap:8px; justify-content:flex-end; flex-wrap:wrap">
           ${bookedTxt}
-          <div class="badge"><strong>${sel ? Math.max(0,(g.remaining||0)-1) : (g.remaining||0)}</strong> remaining</div>
-          <button class="btn ${sel?'selected':''}" ${canSelect?'':'disabled'}>${btnText}</button>
+          <div class="badge"><strong>${remainingDisplay}</strong> remaining</div>
+          <button class="btn ${sel?'selected':''} ${isFullAfter?'full':''}" ${canSelect?'':'disabled'}>${btnText}</button>
         </div>
       </div>`;
     });
@@ -723,10 +689,10 @@
   function applyQueryParams(){
     const q = new URLSearchParams(location.search);
 
-    const qsStall = q.get('stall');   // full Year-Stall (chip)
-    const qsTime  = q.get('time');    // exact Time text
+    const qsStall = q.get('stall');
+    const qsTime  = q.get('time');
     const qsSub   = q.get('sub');     // "sub::<label>" or "extra::<Year-Stall>"
-    const qsHide  = q.get('hide');    // "1" to hide full
+    const qsHide  = q.get('hide');
 
     if (qsStall && (meta.stalls||[]).includes(qsStall)) {
       current.stall = qsStall; collapseTo(qsStall);
