@@ -106,7 +106,7 @@
   <header class="hero">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>TEST SITE</h1>
+        <h1>LMS Christmas Fair — Volunteer sign-up</h1>
         <div class="hero-sub">Filter by year-group/time • Volunteer for a slot(s) • See remaining places live</div>
       </div>
       <img class="hero-logo" src="images/PTAlogoH.png" alt="Lady Margaret School PTA" />
@@ -224,6 +224,13 @@
     "Leads":"http://tiny.cc/LMSleads"
   };
 
+  // NEW: specific links for NEW non-year stalls (exact Year-Stall strings in column B)
+  const STALL_LINKS = {
+    "Artisan Foods": "http://tiny.cc/ArtisanFoods",
+    "Governors/LMS Leadership": "http://tiny.cc/GovernorsFrontGate",
+    "Put me where you need me!": "http://tiny.cc/LMSxmasExtraVounteers"
+  };
+
   // ===== DOM =====
   const $ = id => document.getElementById(id);
   const gate=$('gate'), gateInput=$('gateInput'), gateBtn=$('gateBtn'), gateMsg=$('gateMsg');
@@ -322,14 +329,35 @@
     return key;
   }
 
+  // NEW: helper to detect non-year stalls (exact match on Year-Stall text)
+  function isExtraStall(stallLabel){
+    return Object.prototype.hasOwnProperty.call(STALL_LINKS, stallLabel);
+  }
+
   function linksForSelection(pickedLabels){
+    // Collect unique Year-Stall labels from picked items (before first comma)
     const uniqueStalls = [...new Set(pickedLabels.map(l => l.split(',')[0].trim()))];
-    const years = uniqueStalls.map(extractYearKey).filter(Boolean);
+    const years = uniqueStalls
+      .filter(s => !isExtraStall(s))       // only year-based
+      .map(extractYearKey)
+      .filter(Boolean);
+
     const hasLead  = pickedLabels.some(l => ROLE_LEAD_RE.test(l));
     const hasCoord = pickedLabels.some(l => ROLE_COORD_RE.test(l));
+
     const links = [];
+
+    // Add year links (if any)
     years.forEach(y => { if (YEAR_LINKS[y]) links.push(YEAR_LINKS[y]); });
+
+    // Add specific stall links for extra (non-year) stalls
+    uniqueStalls.forEach(s => {
+      if (isExtraStall(s)) links.push(STALL_LINKS[s]);
+    });
+
+    // Add Leads link if lead OR co-ordinator is selected
     if ((hasLead || hasCoord) && YEAR_LINKS['Leads']) links.push(YEAR_LINKS['Leads']);
+
     return [...new Set(links)];
   }
 
@@ -357,13 +385,15 @@
     const sel    = normSub(selected);
 
     const isLead  = /\blead\b/i.test(r);
-    // const isCoord = /\b(?:stall\s*)?(?:co[- ]?ordinator|coordinator)(?:\s*\d+)?\b/i.test(r); // not used for hiding now
 
-    // Leads: decide by ROLE text only
+    // Leads: decide by ROLE text only — extend to new sub-stalls
     if (isLead) {
       const wants = {
         'y7 grotto':                 [/grotto/i],
+        'y7 photobooth':             [/photo\s*booth|photobooth/i],
         'y8 pies and hot drinks':    [/mulled|pie|mince|hot\s*drinks?|coffee|tea/i],
+        'y8 crisps, sweets & cans':  [/crisp|sweet|can\b|cans\b|choc(olate)?/i],
+        'y8 chocolate tombola':      [/choc(olate)?\s*tombola|tombola/i],
         'y9 bakery':                 [/bake|cake|biscuit/i],
         'y9 spin the wheel':         [/spin/i],
         'y10 books':                 [/book/i],
@@ -466,10 +496,14 @@
   }
 
   function populateSubstall(yearLabel){
+    // UPDATED list with new sub-stalls
     const opts = [
       '',
       'Y7 Grotto',
+      'Y7 Photobooth',
       'Y8 Pies and hot drinks',
+      'Y8 Crisps, Sweets & Cans',
+      'Y8 Chocolate Tombola',
       'Y9 Bakery',
       'Y9 Spin the Wheel',
       'Y10 Books',
@@ -501,9 +535,9 @@
       'Y11':'Y11: Teen Tombola',
       'Y12-13':'Y12/13 Vintage, Uniform & Bottle Tombola'
     };
-    if (sub.startsWith('Y7 ')) return map.Y7;
-    if (sub.startsWith('Y8 ')) return map.Y8;
-    if (sub.startsWith('Y9 ')) return map.Y9;
+    if (sub.startsWith('Y7 '))  return map.Y7;
+    if (sub.startsWith('Y8 '))  return map.Y8;
+    if (sub.startsWith('Y9 '))  return map.Y9;
     if (sub.startsWith('Y10 ')) return map.Y10;
     if (sub.startsWith('Y11 ')) return map.Y11;
     if (sub.startsWith('Y12-13 ')) return map['Y12-13'];
