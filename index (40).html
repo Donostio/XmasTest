@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LMS Christmas Fair — Volunteer sign-up</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-09GP3CBRR8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-09GP3CBRR8');
+</script>
+
+<!-- 🎅 Santa emoji tab icon -->
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎅</text></svg>'>
+<link rel="apple-touch-icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180"><text y=".9em" font-size="160">🎅</text></svg>'>
+
+<style>
+  :root{ --bg:#f8f9fb; --card:#fff; --text:#222; --muted:#6c757d;
+    --accent:#3498db; --accent-wait:#7f8c8d; --good:#2ecc71; --danger:#e03131; --badge:#f5f7fa; --primary:#e53935; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  .wrap{ max-width:1160px; margin:24px auto; padding:0 16px; }
+  .card{ background:var(--card); border:1px solid #e6ebf1; border-radius:16px; padding:16px; }
+  h1{ font-size:28px; margin:0 0 6px; }
+
+  /* HERO */
+  .hero{ position:relative; border-radius:16px; overflow:hidden; border:1px solid #e6ebf1;
+    background:#022a31 url("images/BG.png") center/cover no-repeat; min-height:120px; }
+  .hero::before{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(0,0,0,.45), rgba(0,0,0,.25)); }
+  .hero-content{ position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px; }
+  .hero-text{ color:#fff; }
+  .hero-text h1{ color:#fff; font-size:28px; margin:0 0 4px; }
+  .hero-sub{ color:#fff; opacity:.9; }
+  .hero-logo{ height:56px; width:auto; object-fit:contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+  @media(min-width:900px){ .hero{ min-height:160px; } .hero-text h1{ font-size:32px; } .hero-logo{ height:72px; } }
+  @media(max-width:640px){ .hero-content{ flex-direction:column; align-items:flex-start; } .hero-logo{ height:56px; margin-top:6px; } }
+
+  /* Layout & UI */
+  .muted{ color:var(--muted); }
+  .row{ display:grid; grid-template-columns: 1fr; gap:16px; }
+  @media(min-width:1100px){ .row{ grid-template-columns: 2fr 1fr; } }
+  .filters{ display:flex; gap:16px; align-items:flex-start; }
+  .filters .left{ flex:1 1 auto; min-width:260px; }
+  .filters .right{ flex:1 1 40%; min-width:260px; }
+  @media(max-width: 720px){ .filters{ flex-direction:column; } .filters .right{ width:100%; } }
+  label{ display:flex; flex-direction:column; gap:6px; font-weight:600; }
+  select, input, button, .chip{ font:inherit; }
+  select, input{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6ebf1; background:var(--badge); transition:border-color .15s,background .15s; }
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{ display:inline-block; padding:6px 12px; border-radius:999px; background:#ecf5fc; border:1px solid #d1e9ff; color:#1877c9; cursor:pointer; user-select:none; }
+  .chip.active{ background:#d1e9ff; }
+  .timeHeader{ margin:12px 0 6px; font-weight:700; color:#334155; }
+  .slots{ display:flex; flex-direction:column; gap:12px; min-height:60px; }
+  .toolbar{ display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; }
+  .toolbar .right{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .slot{ display:grid; grid-template-columns: 1fr 300px; gap:12px; padding:12px; border:1px solid #e6ebf1; border-radius:14px; background:var(--card); align-items:center; width:100%; }
+  @media(max-width: 640px){ .slot{ grid-template-columns:1fr; } }
+  .badge{ background:#f4faf6; border:1px solid #d6eade; border-radius:12px; padding:6px 10px; text-align:center; white-space:nowrap; }
+  .panel{ display:flex; flex-direction:column; gap:8px; }
+  .progress{ height:14px; background:var(--badge); border:1px solid #e6ebf1; border-radius:10px; overflow:hidden; }
+  .bar{ height:100%; background:var(--good); width:0%; }
+  .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+  @media(max-width: 640px){ .grid2{ display:grid; grid-template-columns:1fr; gap:8px; } }
+  ul{ margin:6px 0 0; padding-left:1rem; }
+  .error{ color:var(--danger); font-weight:600; }
+  .help{ font-size:12px; color:#6c757d; }
+  .req::after{ content:" *"; color:var(--danger); font-weight:700; }
+  .btn{ background:var(--accent); color:#fff; border:none; border-radius:12px; padding:10px 14px; cursor:pointer; transition:background .2s,opacity .2s; }
+  .btn.selected{ background:#1f7cc7; }
+  .btn.wait{ background:var(--accent-wait); opacity:.85; }
+  .btn-primary{ background:var(--primary); font-weight:700; padding:14px 18px; font-size:18px; border-radius:14px; }
+  .loading{ padding:16px; font-weight:800; color:var(--danger); }
+  .mega{ font-size:1.8rem; } .mega .santa{ font-size:2.4rem; }
+  .invalid{ border-color:var(--danger)!important; background:#fff5f5!important; }
+  .field-error{ display:none; font-size:12px; color:#e03131; margin-top:4px; }
+  .field-error.show{ display:block; }
+  .banner{ margin-top:8px; padding:8px 10px; border-radius:10px; background:#fff5f5; border:1px solid #ffd6d6; color:#9b1c1c; }
+  .gate{ position:fixed; inset:0; background:rgba(248,249,251,.98); display:flex; align-items:center; justify-content:center; z-index:9999; }
+  .gate .box{ background:#fff; border:1px solid #e6ebf1; border-radius:16px; padding:20px; width:min(420px,90vw); box-shadow:0 10px 30px rgba(0,0,0,.06); }
+  .desc{ white-space:pre-wrap; color:#111; }
+  .linkbtn{ background:none; border:none; color:#1877c9; text-decoration:underline; cursor:pointer; padding:0; margin-top:8px; font:inherit; }
+  #globalLoading{ margin-top:12px; }
+  .names{ color:#94a3b8; font-size:12px; margin-top:6px; line-height:1.35; }
+</style>
+</head>
+<body>
+<!-- Password gate -->
+<div id="gate" class="gate">
+  <div class="box">
+    <h3 style="margin:0 0 8px">Enter password</h3>
+    <div class="muted" style="margin-bottom:10px">
+      This page is for LMS PTA volunteers. If you don't have the password please ask your Form Whatsapp.
+    </div>
+    <input id="gateInput" type="password" placeholder="Password" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6ebf1; background:#f5f7fa" />
+    <button id="gateBtn" class="btn" style="margin-top:10px; width:100%">Continue</button>
+    <div id="gateMsg" class="error" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none">
+  <!-- HERO header -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>LMS Christmas Fair — Volunteer sign-up</h1>
+        <div class="hero-sub">Filter by year-group/time • Volunteer for a slot(s) • See remaining places live</div>
+      </div>
+      <img class="hero-logo" src="images/PTAlogoH.png" alt="Lady Margaret School PTA" />
+    </div>
+  </header>
+
+  <!-- Global loader -->
+  <div id="globalLoading" class="loading mega"><span class="santa">🎅 Ho Ho Ho</span>-ld on while volunteer opportunities load!</div>
+  <div id="netErr" class="banner" style="display:none"></div>
+
+  <!-- Filters -->
+  <div class="card" id="filtersCard" style="margin-top:12px; display:none">
+    <div class="filters">
+      <div class="left">
+        <div style="font-weight:600; margin-bottom:6px">Please select your year group</div>
+        <div class="chips" id="stallChips"></div>
+        <button id="changeYear" class="linkbtn" style="display:none">Change year group</button>
+      </div>
+      <div class="right">
+        <div style="font-weight:600; margin-bottom:6px">About this year-group</div>
+        <div id="stallDesc" class="desc">Choose a year-group to see what they're doing.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:12px">
+    <div>
+      <!-- Toolbar -->
+      <div class="toolbar" id="toolbar" style="display:none">
+        <div class="muted"><strong id="needFill">We need to fill 0 more slots!</strong></div>
+        <div class="right">
+          <label style="display:flex; align-items:center; gap:8px; font-weight:600">
+            <input type="checkbox" id="hideFilled"/> <span>Hide fully-booked slots</span>
+          </label>
+          <label style="flex-direction:row; gap:8px; align-items:center; font-weight:600">Time
+            <select id="timeSelect"></select>
+          </label>
+          <label style="flex-direction:row; gap:8px; align-items:center; font-weight:600">Stall
+            <select id="substallSelect"></select>
+          </label>
+        </div>
+      </div>
+
+      <div id="slots" class="slots"></div>
+      <div id="slotsLoading" class="loading mega" style="display:none"><span class="santa">🎅 Ho Ho Ho</span>-ld on while volunteer opportunities load!</div>
+    </div>
+
+    <div class="panel">
+      <div class="card">
+        <strong>My details</strong>
+        <div class="help" style="margin-top:6px; margin-bottom:6px; color:#e03131">
+          Student volunteers: name and class but <em>parent/guardian email and mobile only</em>.
+        </div>
+        <div class="grid2" style="margin-top:4px">
+          <div><label class="req">First name <input id="firstName" autocomplete="given-name"/></label></div>
+          <div><label class="req">Last name  <input id="lastName"  autocomplete="family-name"/></label></div>
+          <div><label class="req">Email      <input id="email" type="email" autocomplete="email"/><div id="emailErr" class="field-error">Enter a valid email address.</div></label></div>
+          <div><label class="req">Mobile (for WhatsApp communications) <input id="mobile" type="tel" autocomplete="tel" placeholder="07xxxxxxxxx"/><div id="mobileErr" class="field-error">Enter a UK mobile (07xxxxxxxxx)</div></label></div>
+        </div>
+        <div class="grid2" style="margin-top:8px">
+          <div><label class="req">Class <select id="childClass"></select><div id="classErr" class="field-error">Please choose a class.</div></label></div>
+          <div></div>
+        </div>
+        <div id="formBanner" class="banner" style="display:none"></div>
+      </div>
+
+      <div class="card">
+        <strong>Your selected positions</strong>
+        <div id="selected"></div>
+        <button id="confirm" class="btn btn-primary" style="margin-top:8px" type="button" disabled>Confirm sign-up</button>
+        <div id="msg" style="margin-top:6px"></div>
+      </div>
+
+      <div class="card">
+        <strong>Booked summary</strong>
+        <div id="summary"></div>
+      </div>
+
+      <!-- Help / feedback box -->
+      <div class="card">
+        <strong>Need to cancel or get help?</strong>
+        <p style="margin:8px 0 0;">
+          If you need to cancel a booking you made, give feedback on this site, or request help,
+          please use <a href="https://forms.gle/kwztF7jAgroXYQ8U6" target="_blank" rel="noopener">this form</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="debug" class="help" style="margin-top:12px"></div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ===== CONFIG =====
+  const API_BASE = 'https://script.google.com/macros/s/AKfycbyeAsjInlE1B-z7SGXvU2fU7cO_lI7yEqFDDRKN47madhNjLFRVSP8siOiNleOO4umwCg/exec';
+
+  // Hard-coded classes (prevents blank dropdown if meta hiccups)
+  const CLASS_LIST = [
+    '7KM','7KL','7BU','7AB','8RE','8PH','8NAA','8KH','9VM','9NA','9AW','9ATB',
+    '10OM','10KF','10JT','10GR','10AN','11KAH','11IDC','11EW','11DU','11CJ',
+    '12/13SSS','12/13RC','12/13NB','12/13LVE','12/13LN','12/13JD','12/13ID','12/13EDW','12/13AR','12/13ALB','N/A'
+  ];
+
+  // WhatsApp links by year + Leads
+  const YEAR_LINKS = {
+    "Y7": "http://tiny.cc/Xmas7",
+    "Y8": "http://tiny.cc/Xmas8",
+    "Y9": "http://tiny.cc/Xmas9",
+    "Y10":"http://tiny.cc/Xmas10",
+    "Y11":"http://tiny.cc/Xmas11",
+    "Y12/13":"http://tiny.cc/Xmas12-13",
+    "Leads":"http://tiny.cc/LMSleads"
+  };
+
+  // ===== DOM =====
+  const $ = id => document.getElementById(id);
+  const gate=$('gate'), gateInput=$('gateInput'), gateBtn=$('gateBtn'), gateMsg=$('gateMsg');
+  const app=$('app'), globalLoading=$('globalLoading'), filtersCard=$('filtersCard'), toolbar=$('toolbar'), netErr=$('netErr');
+  const stallChips=$('stallChips'), changeYear=$('changeYear'), stallDesc=$('stallDesc');
+  const timeSelect=$('timeSelect'), hideFilled=$('hideFilled'), substallSelect=$('substallSelect');
+  const slotsEl=$('slots'), slotsLoading=$('slotsLoading'), needFill=$('needFill');
+  const selectedEl=$('selected'), confirmBtn=$('confirm'), msgEl=$('msg');
+  const firstName=$('firstName'), lastName=$('lastName'), email=$('email'), mobile=$('mobile'), childClass=$('childClass');
+  const emailErr=$('emailErr'), mobileErr=$('mobileErr'), classErr=$('classErr'), formBanner=$('formBanner');
+  const summaryEl=$('summary'), debugEl=$('debug');
+
+  // ===== STATE =====
+  let meta={ stalls:[], times:[], classes:[], substalls:[], descriptionsByStall:{} };
+  let stallIndex=new Map(); let current={ stall:'', time:'', substall:'' };
+  let groups=[]; const selection=new Map(); let descMap=new Map();
+  let booted=false, listenersBound=false;
+
+  // ===== UTILS =====
+  const getKey = ()=> localStorage.getItem('lms_key') || '';
+  const setKey = k => localStorage.setItem('lms_key', k);
+  const clearKey = ()=> localStorage.removeItem('lms_key');
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));
+  const timeout = ms => new Promise((_,rej)=>setTimeout(()=>rej(new Error('Network timeout')),ms));
+
+  async function fetchJSON(url, opts={}, keyOverride='', tries=3){
+    const key = keyOverride || getKey();
+    const joiner = url.includes('?') ? '&' : '?';
+    const withKey = url + joiner + 'key=' + encodeURIComponent(key) + '&cb=' + Math.random().toString(36).slice(2);
+    const timeouts=[12000,22000,35000];
+    const to=timeouts[Math.max(0, 3-tries)];
+    try{
+      const res = await Promise.race([ fetch(withKey, {mode:'cors', redirect:'follow', keepalive:true, ...opts}), timeout(to) ]);
+      const txt = await res.text();
+      try { return JSON.parse(txt); } catch { return { ok:false, error:`HTTP ${res.status} ${res.statusText}: ${txt.slice(0,200)}` }; }
+    }catch(err){
+      if(tries>1){ await sleep(300+Math.random()*600); return fetchJSON(url, opts, keyOverride, tries-1); }
+      showNetError(err, url);
+      return { ok:false, error:String(err) };
+    }
+  }
+  function showNetError(err){
+    netErr.style.display='block';
+    const ping = (API_BASE+'?action=ping&key='+encodeURIComponent(getKey()));
+    netErr.innerHTML = `Network error talking to the rota. Please check your Apps Script deployment.<br>
+      <strong>Tip:</strong> Deploy as <em>Execute as: Me</em> and <em>Who has access: Anyone</em> (new version).<br>
+      <a href="${ping}" target="_blank" rel="noopener">Test API (ping)</a><br>
+      <span class="error">${String(err)}</span>`;
+  }
+
+  function openGate(){ gate.style.display='flex'; app.style.display='none'; }
+  function openApp(){ gate.style.display='none'; app.style.display='block'; }
+
+  // ===== VALIDATION =====
+  const isValidEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||'').trim());
+  const isValidUKMobile=v=>/^07\d{9}$/.test((v||'').replace(/\s+/g,''))||/^\+447\d{9}$/.test((v||'').replace(/\s+/g,''))||/^00447\d{9}$/.test((v||'').replace(/\s+/g,''));
+  function setValidity(i, ok, err){ i.classList.toggle('invalid', !ok); if(err) err.classList.toggle('show', !ok); }
+  function validateForm(){
+    const okF=!!firstName.value.trim(), okL=!!lastName.value.trim(), okE=isValidEmail(email.value), okM=isValidUKMobile(mobile.value), okC=!!childClass.value;
+    setValidity(firstName, okF); setValidity(lastName, okL); setValidity(email, okE, emailErr); setValidity(mobile, okM, mobileErr); setValidity(childClass, okC, classErr);
+    return okF && okL && okE && okM && okC;
+  }
+  document.addEventListener('input', ()=>{ confirmBtn.disabled = !(validateForm() && selection.size>0); });
+
+  // ===== YEAR + DESC UI =====
+  function collapseTo(stallLabel){
+    stallChips.querySelectorAll('.chip').forEach(c=>{
+      const match = c.dataset.stall === stallLabel;
+      c.style.display = match ? 'inline-block' : 'none';
+      c.classList.toggle('active', match);
+    });
+    changeYear.style.display = 'inline';
+    stallDesc.textContent = descMap.get(stallLabel) || 'No description yet.';
+  }
+  function expandAllChips(){
+    stallChips.querySelectorAll('.chip').forEach(c=>{ c.style.display='inline-block'; c.classList.remove('active'); });
+    changeYear.style.display = 'none';
+    stallDesc.textContent = 'Choose a year-group stall to see details here.';
+  }
+
+  // ===== CLASSIFIERS =====
+  const ROLE_STUDENT_RE = /\bstudent\b/i;
+  const ROLE_COORD_RE   = /\b(?:stall\s*)?(?:co[- ]?ordinator|coordinator)(?:\s*\d+)?\b/i;
+  const ROLE_LEAD_RE    = /\blead\b/i;
+
+  const isLead = g => g.time==='Stall Lead' || ROLE_LEAD_RE.test(g.role||'');
+  const isCoord = g => ROLE_COORD_RE.test(g.role||'');
+  const isDonationBake = g => /^bake:\s*/i.test(g.role||'');
+  function sectionOf(g){ if (isLead(g)) return 0; if (isCoord(g)) return 1; if (isDonationBake(g)) return 2; return 3; }
+
+  function extractYearKey(stallLabel){
+    const m = String(stallLabel||'').match(/^Y(?:\d{1,2}(?:\/\d{1,2})?)/i);
+    if (!m) return "";
+    let key = m[0].toUpperCase();
+    if (key === 'Y12' || key === 'Y13') key = 'Y12/13';
+    return key;
+  }
+
+  function linksForSelection(pickedLabels){
+    const uniqueStalls = [...new Set(pickedLabels.map(l => l.split(',')[0].trim()))];
+    const years = uniqueStalls.map(extractYearKey).filter(Boolean);
+    const hasLead  = pickedLabels.some(l => ROLE_LEAD_RE.test(l));
+    const hasCoord = pickedLabels.some(l => ROLE_COORD_RE.test(l));
+    const links = [];
+    years.forEach(y => { if (YEAR_LINKS[y]) links.push(YEAR_LINKS[y]); });
+    if ((hasLead || hasCoord) && YEAR_LINKS['Leads']) links.push(YEAR_LINKS['Leads']);
+    return [...new Set(links)];
+  }
+
+  // ===== Sub-stall normaliser + filter =====
+  function normSub(s){
+    return String(s||'')
+      .toLowerCase()
+      .replace(/[–—]/g,'-')
+      .replace(/\s*&\s*/g,' & ')
+      .replace(/\s+/g,' ')
+      .replace(/pre[-\s]?loved/g,'pre-loved')
+      .trim();
+  }
+
+  /* Sub-stall filter (no hiding of Lead or Coordinator anywhere):
+     - Leads: decide ONLY by Role text (not Year-Stall).
+     - Single sub-stall rows: exact match (normalised).
+     - Combo rows: include in BOTH sub-stalls; split by keywords when possible.
+  */
+  function subMatches(rowSub, role, selected) {
+    if (!selected) return true;
+
+    const r      = String(role || '');
+    const sub    = normSub(rowSub);
+    const sel    = normSub(selected);
+
+    const isLead  = /\blead\b/i.test(r);
+    // const isCoord = /\b(?:stall\s*)?(?:co[- ]?ordinator|coordinator)(?:\s*\d+)?\b/i.test(r); // not used for hiding now
+
+    // Leads: decide by ROLE text only
+    if (isLead) {
+      const wants = {
+        'y7 grotto':                 [/grotto/i],
+        'y8 pies and hot drinks':    [/mulled|pie|mince|hot\s*drinks?|coffee|tea/i],
+        'y9 bakery':                 [/bake|cake|biscuit/i],
+        'y9 spin the wheel':         [/spin/i],
+        'y10 books':                 [/book/i],
+        'y10 pre-loved':             [/pre[-\s]?loved/i],
+        'y11 teen tombola':          [/teen\s*tombola|tombola/i],
+        'y12-13 bottle tombola':     [/bottle\s*tombola/i],
+        'y12-13 uniform':            [/uniform/i],
+        'y12-13 vintage':            [/vintage/i],
+      };
+      const tests = wants[sel];
+      return tests ? tests.some(rx => rx.test(r)) : true;
+    }
+
+    const hasSpin = /spin/i.test(r);
+    const hasBake = /bake|cake|biscuit/i.test(r);
+    const hasBook = /book/i.test(r);
+    const hasPre  = /pre[-\s]?loved/i.test(r);
+
+    const isGenericBakerySpin = !hasSpin && !hasBake;
+    const isGenericBooksPre   = !hasBook && !hasPre;
+
+    if (sub === sel) return true;
+
+    if (sub === 'y9 bakery & spin the wheel') {
+      if (sel === 'y9 bakery')         return hasBake || isGenericBakerySpin;
+      if (sel === 'y9 spin the wheel') return hasSpin || isGenericBakerySpin;
+      return false;
+    }
+    if (sub === 'y10 pre-loved & books') {
+      if (sel === 'y10 books')      return hasBook || isGenericBooksPre;
+      if (sel === 'y10 pre-loved')  return hasPre  || isGenericBooksPre;
+      return false;
+    }
+
+    return false;
+  }
+
+  // ===== META LOAD =====
+  async function loadMeta(){
+    const data=await fetchJSON(`${API_BASE}?action=meta`);
+    if(!data.ok){ debugEl.textContent='Meta error: ' + (data.error||'unknown'); return; }
+    meta=data;
+
+    const prevStall = current.stall;
+    const prevTime  = current.time;
+    const prevSub   = current.substall;
+
+    stallIndex = new Map((meta.stalls||[]).map((s,i)=>[s,i]));
+    descMap = new Map(Object.entries(meta.descriptionsByStall || {}));
+
+    // Year chips
+    stallChips.innerHTML = (meta.stalls||[]).map(s=>`<span class="chip" data-stall="${s}">${s}</span>`).join('');
+
+    if(!listenersBound){
+      stallChips.addEventListener('click',(e)=>{
+        const chip=e.target.closest('.chip'); if(!chip) return;
+        const s=chip.dataset.stall;
+        const isActive = chip.classList.contains('active');
+        if(isActive){ current.stall=''; expandAllChips(); populateSubstall(''); }
+        else{ current.stall=s; collapseTo(s); populateSubstall(s); }
+        syncUrl(); loadGroups();
+      });
+      changeYear.addEventListener('click', ()=>{ current.stall=''; expandAllChips(); populateSubstall(''); syncUrl(); loadGroups(); });
+      timeSelect.addEventListener('change',()=>{ current.time=timeSelect.value; syncUrl(); loadGroups(); });
+      hideFilled.addEventListener('change', ()=>{ syncUrl(); loadGroups(); });
+      substallSelect.addEventListener('change', ()=>{
+        current.substall = substallSelect.value;
+        const y = yearFromSubstall(current.substall);
+        if (y){
+          current.stall = y;
+          collapseTo(y);
+        }
+        syncUrl();
+        loadGroups();
+      });
+      listenersBound=true;
+    }
+
+    // Times
+    const times=(meta.times||[]).slice().sort((a,b)=>a.localeCompare(b));
+    timeSelect.innerHTML = `<option value="">All times</option>` + times.map(t=>`<option value="${t}" ${t===prevTime?'selected':''}>${t}</option>`).join('');
+    current.time = prevTime || '';
+
+    // Classes
+    childClass.innerHTML = `<option value="">— Select class —</option>` + CLASS_LIST.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+    // Sub-stall dropdown
+    populateSubstall(prevStall || '');
+    if (prevSub) substallSelect.value = prevSub;
+
+    // Restore stall selection
+    if(prevStall){ current.stall = prevStall; collapseTo(prevStall); }
+    else{ expandAllChips(); }
+
+    // Apply deep-link params after meta is ready
+    applyQueryParams();
+
+    filtersCard.style.display='block';
+    toolbar.style.display='flex';
+  }
+
+  function populateSubstall(yearLabel){
+    const opts = [
+      '',
+      'Y7 Grotto',
+      'Y8 Pies and hot drinks',
+      'Y9 Bakery',
+      'Y9 Spin the Wheel',
+      'Y10 Books',
+      'Y10 Pre-Loved',
+      'Y11 Teen Tombola',
+      'Y12-13 Bottle Tombola',
+      'Y12-13 Uniform',
+      'Y12-13 Vintage',
+    ];
+    const html = opts.map(v=>{
+      const lab = v || 'All stalls';
+      if (yearLabel){
+        const y = yearFromSubstall(v);
+        if (v && y && y !== yearLabel) return '';
+      }
+      return `<option value="${v}">${lab}</option>`;
+    }).join('');
+    substallSelect.innerHTML = html;
+    if (yearLabel) substallSelect.value = '';
+  }
+
+  function yearFromSubstall(sub){
+    if (!sub) return '';
+    const map = {
+      'Y7':'Y7: Santa\'s Grotto',
+      'Y8':'Y8 Mulled wine, Mince Pies & Hot Drinks',
+      'Y9':'Y9: Bakery and Spin the Wheel',
+      'Y10':'Y10: Books & Pre Loved Stall Rota',
+      'Y11':'Y11: Teen Tombola',
+      'Y12-13':'Y12/13 Vintage, Uniform & Bottle Tombola'
+    };
+    if (sub.startsWith('Y7 ')) return map.Y7;
+    if (sub.startsWith('Y8 ')) return map.Y8;
+    if (sub.startsWith('Y9 ')) return map.Y9;
+    if (sub.startsWith('Y10 ')) return map.Y10;
+    if (sub.startsWith('Y11 ')) return map.Y11;
+    if (sub.startsWith('Y12-13 ')) return map['Y12-13'];
+    return '';
+  }
+
+  // ===== SLOTS =====
+  const TIME_ORDER = [
+    'Stall Lead','Baking','FRIDAY Anytime between 1pm - 6pm','Friday (Day Before stall Sorting & Set up)',
+    '10.00am -12.00pm','11:00 - 12:00pm','11.00am -3:00pm','12:00pm - 1:00pm','12.00am - 2.00pm','1:00pm - 2:00pm','2:00pm - 3:00pm','2.00pm - 4.00pm'
+  ];
+  const tIdx = t => { const i=TIME_ORDER.indexOf(t||''); return i===-1?999:i; };
+  const sIdx = s => stallIndex.has(s)? stallIndex.get(s): 999;
+  const minUrn = g => {
+    const arr = Array.isArray(g.available_urns)&&g.available_urns.length ? g.available_urns : (g.all_urns||[]);
+    const ns = (arr||[]).map(u=>parseInt(String(u).replace(/\D/g,''),10)).filter(n=>!isNaN(n));
+    return ns.length ? Math.min(...ns) : 999999;
+  };
+
+  async function loadGroups(){
+    slotsLoading.style.display='block';
+    slotsEl.innerHTML='';
+    netErr.style.display='none';
+
+    const p=new URLSearchParams();
+    p.set('action','slots');
+    if(current.stall) p.set('stall', current.stall);
+    if(current.time)  p.set('time',  current.time);
+    p.set('includeFull','1');
+
+    const data=await fetchJSON(`${API_BASE}?${p.toString()}`);
+    if(!data.ok){ debugEl.textContent='Slots error: ' + (data.error||'unknown'); groups=[]; render(); slotsLoading.style.display='none'; globalLoading.style.display='none'; return; }
+
+    let list=(data.data||[]).slice();
+
+    // Sub-stall filter
+    list = list.filter(g => subMatches(g.sub_stall, g.role, current.substall));
+
+    // Hide full if requested
+    if (hideFilled.checked) list = list.filter(g => (g.remaining||0) > 0);
+
+    // Sort
+    list = list.sort((a,b)=>{
+      const sa=sectionOf(a), sb=sectionOf(b);
+      if(sa!==sb) return sa-sb;
+      if(sa<=2){ const d=sIdx(a.stall)-sIdx(b.stall); if(d!==0) return d; return minUrn(a)-minUrn(b); }
+      const dt=tIdx(a.time)-tIdx(b.time); if(dt!==0) return dt;
+      const ds=sIdx(a.stall)-sIdx(b.stall); if(ds!==0) return ds;
+      return minUrn(a)-minUrn(b);
+    });
+
+    groups=list;
+    render();
+
+    slotsLoading.style.display='none';
+    globalLoading.style.display='none';
+  }
+
+  async function loadSummary(){
+    const data=await fetchJSON(`${API_BASE}?action=summary`);
+    if(!data.ok){ debugEl.textContent='Summary error: ' + (data.error||'unknown'); return; }
+    const sum=data.data||[];
+    summaryEl.innerHTML=sum.map(s=>{
+      const pct=Math.round((s.pct||0)*100);
+      return `<div style="margin:6px 0">${s.stall} — ${s.booked}/${s.capacity}
+        <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  // ===== RENDER =====
+  function render(){
+    const totalRemaining = groups.reduce((acc,g)=>acc+(g.remaining||0),0);
+    needFill.textContent = `We need to fill ${totalRemaining} more slots!`;
+
+    let html='', lastTime=null;
+    groups.forEach(g=>{
+      const sec = sectionOf(g);
+      if(sec===3 && g.time!==lastTime){
+        html += `<div class="timeHeader">${g.time||''}</div>`;
+        lastTime = g.time;
+      }
+      const sel = selection.has(g.group_id);
+      const btnText = sel?'Selected':'Select';
+      const canSelect = (g.remaining||0)>0 || sel;
+      const bookedTxt = `<span class="muted" style="margin-right:8px">${g.booked||0} booked</span>`;
+
+      let namesHtml = '';
+      if (g.booked_names && !/student/i.test(g.role||'')) {
+        const safe = (g.booked_names||[]).slice(0,6).map(n => String(n||'').replace(/[<>&]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[s])) );
+        if (safe.length) namesHtml = `<div class="names">${safe.join('<br>')}</div>`;
+      }
+
+      html += `<div class="slot" data-id="${g.group_id}">
+        <div>
+          <div><strong>${g.role||''}</strong></div>
+          <div class="muted">${g.stall}${(g.time && sec!==3)?` • ${g.time}`:''}</div>
+          ${namesHtml}
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; justify-content:flex-end; flex-wrap:wrap">
+          ${bookedTxt}
+          <div class="badge"><strong>${sel ? Math.max(0,(g.remaining||0)-1) : (g.remaining||0)}</strong> remaining</div>
+          <button class="btn ${sel?'selected':''}" ${canSelect?'':'disabled'}>${btnText}</button>
+        </div>
+      </div>`;
+    });
+    slotsEl.innerHTML = html;
+
+    document.querySelectorAll('.slot').forEach(card=>{
+      const id=card.getAttribute('data-id');
+      const g=groups.find(x=>x.group_id===id);
+      const btn=card.querySelector('button');
+      if(!btn || !g) return;
+      btn.addEventListener('click', ()=>{
+        if(selection.has(id)){ selection.delete(id); render(); return; }
+        if((g.remaining||0)<=0 || !g.available_urns || !g.available_urns.length){
+          formBanner.textContent = 'Sorry, this role is fully booked now.';
+          formBanner.style.display='block';
+          return;
+        }
+        const urn=g.available_urns[0];
+        selection.set(id, { urn, label: `${g.year_stall}, ${g.role}, ${g.time || ''}` });
+        render();
+      });
+    });
+
+    const items=[...selection.values()];
+    selectedEl.innerHTML = items.length ? `<ul>${items.map(it=>`<li>${it.label}</li>`).join('')}</ul>` : '<div class="muted">No positions selected yet.</div>';
+    confirmBtn.disabled = !(validateForm() && selection.size>0);
+  }
+
+  // ===== SUBMIT =====
+  confirmBtn.addEventListener('click', async ()=>{
+    formBanner.style.display='none'; formBanner.textContent='';
+    const urns=[...selection.values()].map(v=>v.urn);
+    const pickedLabels=[...selection.values()].map(v=>v.label);
+
+    if(!validateForm() || selection.size===0){
+      formBanner.textContent = selection.size===0 ? 'Please select at least one position.' : 'Please correct the highlighted fields.';
+      formBanner.style.display='block'; confirmBtn.disabled = true; return;
+    }
+    const original=confirmBtn.textContent;
+    confirmBtn.textContent='Please wait…'; confirmBtn.classList.add('wait'); confirmBtn.disabled=true;
+    msgEl.style.color='#111'; msgEl.style.fontWeight='700';
+
+    const body = new URLSearchParams({
+      first_name:firstName.value.trim(),
+      last_name:lastName.value.trim(),
+      email:email.value.trim(),
+      mobile:mobile.value.trim(),
+      child_class:childClass.value,
+      slot_ids: urns.join(','),
+      key: getKey()
+    }).toString();
+
+    const res = await fetchJSON(API_BASE, { method:'POST', headers:{ 'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8' }, body });
+    if(!res.ok){
+      const err = String(res.error||'');
+      const nice = /Some positions are no longer available/i.test(err)
+        ? 'Sorry, some positions are unavailable now. Select again or message your class rep to volunteer.'
+        : err || 'There was an error';
+      formBanner.textContent = nice;
+      formBanner.style.display='block';
+
+      const m = err.match(/no longer available:\s*(.+)$/i);
+      if(m){
+        const conflicts = m[1].split(',').map(s=>s.trim());
+        for(const [id, val] of selection){ if(conflicts.includes(val.urn)) selection.delete(id); }
+        render();
+      }
+      confirmBtn.disabled = !(validateForm() && selection.size>0);
+    }else{
+      const links = linksForSelection(pickedLabels);
+      const linksHtml = links.length
+        ? links.map(u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`).join(' · ')
+        : '—';
+
+      selection.clear(); render(); confirmBtn.disabled = true;
+
+      msgEl.innerHTML = `
+        <div style="color:#DC143C; font-weight:700">Thank you for volunteering!</div>
+        <div style="color:#DC143C; font-weight:700; margin-top:6px">Note down your slots - put it in your calendar now:</div>
+        <ul style="color:#DC143C; font-weight:700; margin-top:4px">${pickedLabels.map(l => `<li>${l}</li>`).join('')}</ul>
+        <div style="color:#DC143C; font-weight:900; margin-top:6px">
+          Don't forget to join your volunteer group(s) on WhatsApp! This is essential. Please use this link(s) to do so now: ${linksHtml}
+        </div>
+      `;
+
+      await Promise.all([loadGroups(), loadSummary()]);
+    }
+
+    confirmBtn.textContent=original; confirmBtn.classList.remove('wait');
+    confirmBtn.disabled = !(validateForm() && selection.size>0);
+  });
+
+  // ===== DEEP LINKS =====
+  function applyQueryParams(){
+    const q = new URLSearchParams(location.search);
+
+    const qsStall = q.get('stall');   // full Year-Stall chip
+    const qsTime  = q.get('time');    // exact Time text
+    const qsSub   = q.get('sub');     // Sub stall option
+    const qsHide  = q.get('hide');    // "1" to hide full
+
+    if (qsStall && (meta.stalls||[]).includes(qsStall)) {
+      current.stall = qsStall; collapseTo(qsStall); populateSubstall(qsStall);
+    }
+    if (qsTime && (meta.times||[]).includes(qsTime)) {
+      current.time = qsTime; timeSelect.value = qsTime;
+    }
+    if (qsSub) {
+      current.substall = qsSub; substallSelect.value = qsSub;
+      const y = yearFromSubstall(qsSub);
+      if (y) { current.stall = y; collapseTo(y); }
+    }
+    if (qsHide === '1') { hideFilled.checked = true; }
+
+    // load after applying
+    loadGroups();
+  }
+
+  function syncUrl(){
+    const q = new URLSearchParams();
+    if (current.stall) q.set('stall', current.stall);
+    if (current.time)  q.set('time', current.time);
+    if (current.substall) q.set('sub', current.substall);
+    if (hideFilled.checked) q.set('hide','1');
+    const newUrl = `${location.pathname}?${q.toString()}`;
+    history.replaceState(null,'',newUrl);
+  }
+
+  // ===== BOOT =====
+  async function boot(){
+    if(booted) return;
+    booted = true;
+    try{
+      await loadMeta();
+      await loadSummary();
+      // loadGroups() is called inside applyQueryParams() after meta
+      app.style.display='block';
+    }catch(e){
+      debugEl.textContent = 'Startup error: ' + e.message;
+      showNetError(e, API_BASE);
+    }
+  }
+
+  // Gate handlers
+  gateBtn.addEventListener('click', async ()=>{
+    gateMsg.textContent = '';
+    const entered = (gateInput.value||'').trim();
+    if(!entered){ gateMsg.textContent='Please enter the password'; return; }
+    const ping = await fetchJSON(API_BASE+'?action=ping', {}, entered);
+    if(ping && ping.ok){ setKey(entered); gate.style.display='none'; app.style.display='block'; if(!booted) boot(); }
+    else { gateMsg.textContent = 'Incorrect password'; clearKey(); }
+  });
+  gateInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') gateBtn.click(); });
+
+  (async function init(){
+    const stored = getKey();
+    if(stored){
+      const ping = await fetchJSON(API_BASE+'?action=ping');
+      if(ping && ping.ok){ gate.style.display='none'; app.style.display='block'; boot(); return; }
+      clearKey();
+    }
+    gate.style.display='flex';
+  })();
+
+})();
+</script>
+</body>
+</html>
