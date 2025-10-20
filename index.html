@@ -157,7 +157,7 @@
     <div class="panel">
       <div class="card">
         <strong>My details</strong>
-        <div class="help" style="margin-top:6px; margin-bottom:6px; color:#e03131">
+        <div class="help" style="margin-top:6px; margin-bottom:6px; color:#e03131; font-weight:700">
           Student volunteers: name and class but <em>parent/guardian email and mobile only</em>.
         </div>
         <div class="grid2" style="margin-top:4px">
@@ -360,31 +360,55 @@
       options.push({ value:'sub::'+sub, label:sub });
     });
 
-    // Insert Extra stalls in required order:
-    // "Any Year: Artisan Foods" (near top of list after subs)
+    // Extra stalls
     options.push({ value:'extra::Artisan Foods', label:'Any Year: Artisan Foods' });
-    // Bottom two
     options.push({ value:'extra::Put me where you need me!', label:'Put me where you need me!' });
     options.push({ value:'extra::Governors/LMS Leadership', label:'Governors: Front Gate' });
 
     substallSelect.innerHTML = options.map(o=>`<option value="${o.value}">${o.label}</option>`).join('');
-    // Do not auto-select anything
   }
 
-  // ===== FILTER MATCHERS =====
+  // ===== SUB-STALL MATCHERS (FIXED) =====
+
+  // Decide which sub-stall "buckets" a row belongs to
+  function subPartsFor(group){
+    const raw  = group.sub_stall || '';
+    const n    = normSub(raw);
+    const role = norm(group.role || '');
+
+    // Handle the two combined helper sub-stalls specially
+    if (n === 'y9 bakery & spin the wheel') {
+      if (role.includes('spin the wheel')) return ['y9 spin the wheel']; // only Spin
+      if (role.includes('bakery'))         return ['y9 bakery'];         // only Bakery
+      return ['y9 bakery','y9 spin the wheel'];                          // generic helpers to both
+    }
+    if (n === 'y10 pre-loved & books') {
+      if (role.includes('books'))     return ['y10 books'];
+      if (role.includes('pre-loved')) return ['y10 pre-loved'];
+      return ['y10 books','y10 pre-loved'];
+    }
+
+    // Everything else (e.g., "Y8 Crisps, Sweets & Cans") = single exact label
+    return [n];
+  }
+
+  // Compare a group against the selected stall option
   function matchesStallOption(group, subOpt){
     if (!subOpt) return true;
+
+    // "extra::<Year-Stall>" rows filter by Year-Stall (column B) only
     if (subOpt.startsWith('extra::')){
       const stallName = subOpt.slice(7);
-      return group.stall === stallName; // filter by Year-Stall (column B)
+      return group.stall === stallName;
     }
+
+    // "sub::<label>" rows filter by Sub stall (column P) buckets
     if (subOpt.startsWith('sub::')){
-      const wanted = subOpt.slice(5);
-      const sub = group.sub_stall || '';
-      if (!sub) return false;
-      const parts = sub.split('&').map(s=>normSub(s));
-      return parts.some(p => p === normSub(wanted));
+      const wanted = normSub(subOpt.slice(5));
+      const parts  = subPartsFor(group);   // array of normalized bucket labels
+      return parts.some(p => p === wanted);
     }
+
     return true;
   }
 
@@ -632,28 +656,6 @@
   }
 
   // ===== SUBMIT =====
-  function extraLinkForLabel(label){
-    // label is the picked Year-Stall, not the dropdown label
-    const e = EXTRA_STALLS.find(x => x.stall === label);
-    return e ? e.link : '';
-  }
-
-  function linksForPickedLabels(pickedLabels){
-    // reuse earlier function
-    return (function(picked){ return (function(links){
-      const uniq = [...new Set(links)];
-      return uniq;
-    })(picked.reduce((acc, label) => {
-      const stall = label.split(',')[0].trim();
-      const extra = extraLinkFor(stall);
-      if (extra) acc.push(extra);
-      const yKey = extractYearKey(stall);
-      if (yKey && YEAR_LINKS[yKey]) acc.push(YEAR_LINKS[yKey]);
-      if (/\blead\b/i.test(label) || /\bco[- ]?ordinator|coordinator/i.test(label)) acc.push(YEAR_LINKS['Leads']);
-      return acc;
-    }, []));})(pickedLabels);
-  }
-
   confirmBtn.addEventListener('click', async ()=>{
     formBanner.style.display='none'; formBanner.textContent='';
     const urns=[...selection.values()].map(v=>v.urn);
